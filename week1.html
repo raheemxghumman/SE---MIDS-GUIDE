@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 - Introduction to Software Engineering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root {
+  --navy:#0f0a0a; --navy2:#1f1015; --navy3:#3d1a24;
+  --accent:#f43f5e; --accent2:#fb7185; --accent-bg:#fff1f2;
+  --white:#ffffff; --bg:#fdf8f9; --surface:#ffffff;
+  --border:#fecdd3; --text:#0f0a0a; --muted:#9f4458; --light:#fda4af;
+  --green:#10b981; --amber:#f59e0b; --red:#ef4444; --amber-bg:#fffbeb;
+  --font-body:'Inter',sans-serif; --font-head:'Plus Jakarta Sans',sans-serif;
+  --radius:12px; --radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08); --shadow-md:0 4px 16px rgba(0,0,0,.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:16px;line-height:1.75}
+h2.section-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;color:var(--navy);margin:48px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--border);scroll-margin-top:80px}
+h2.section-title:first-child{margin-top:0}
+h3.sub-title{font-family:var(--font-head);font-size:1.15rem;font-weight:700;color:var(--navy2);margin:28px 0 10px;scroll-margin-top:80px}
+h4.mini-title{font-size:0.95rem;font-weight:600;color:var(--navy3);margin:20px 0 8px}
+p{margin-bottom:12px;color:#1e293b}
+ul,ol{padding-left:22px;margin-bottom:14px}
+li{margin-bottom:6px;color:#1e293b}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:var(--font-head);font-weight:700;font-size:1.05rem;color:var(--navy);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-brand span{background:var(--accent);color:#fff;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-family:var(--font-body);font-weight:600}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{font-size:0.85rem;font-weight:500;color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:var(--radius-sm);transition:all .2s}
+.nav-links a:hover,.nav-links a.active{background:var(--accent-bg);color:var(--accent)}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;color:var(--navy)}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--border);padding:16px;z-index:99;flex-direction:column;gap:4px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.9rem;font-weight:500;color:var(--muted);text-decoration:none;padding:10px 14px;border-radius:var(--radius-sm)}
+.mobile-menu a:hover{background:var(--accent-bg);color:var(--accent)}
+@media(max-width:768px){nav{padding:0 16px}.nav-links{display:none}.hamburger{display:block}}
+
+.page-hero{background:var(--navy);color:#fff;padding:52px 32px 40px;border-bottom:1px solid var(--navy2)}
+.page-hero .breadcrumb{font-size:0.8rem;color:#64748b;margin-bottom:12px}
+.page-hero .breadcrumb a{color:var(--accent2);text-decoration:none}
+.page-hero h1{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.page-hero p{color:#94a3b8;margin-top:10px;font-size:1rem;max-width:620px}
+.chapter-badge{display:inline-block;background:rgba(244,63,94,.25);border:1px solid rgba(244,63,94,.4);color:var(--accent2);font-size:0.75rem;font-weight:600;padding:4px 14px;border-radius:20px;margin-bottom:16px}
+
+.layout{display:flex;max-width:1200px;margin:0 auto;min-height:calc(100vh - 60px)}
+.sidebar{width:260px;flex-shrink:0;padding:28px 20px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;border-right:1px solid var(--border);background:#fff}
+.sidebar h3{font-size:0.7rem;font-weight:700;color:var(--light);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;padding-left:8px}
+.sidebar a{display:block;font-size:0.85rem;color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:var(--radius-sm);margin-bottom:2px;transition:all .2s;border-left:2px solid transparent}
+.sidebar a:hover{background:var(--accent-bg);color:var(--accent)}
+.sidebar a.active{background:var(--accent-bg);color:var(--accent);border-left-color:var(--accent);font-weight:500}
+.sidebar a.indent{padding-left:24px;font-size:0.8rem}
+.content{flex:1;padding:40px 48px;max-width:820px;min-width:0}
+@media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);padding:16px 20px}.content{padding:28px 20px}}
+
+.def-box{background:var(--navy);color:#fff;border-radius:var(--radius);padding:22px 28px;margin:20px 0}
+.def-box .def-label{font-size:0.72rem;font-weight:700;color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.def-box p{color:#cbd5e1;font-size:1rem;margin:0;line-height:1.7}
+
+.callout{border-radius:var(--radius-sm);padding:16px 20px;margin:18px 0;font-size:0.93rem}
+.callout.info{background:#eff6ff;border-left:4px solid #3b82f6}
+.callout.warn{background:var(--amber-bg);border-left:4px solid var(--amber)}
+.callout.success{background:#f0fdf4;border-left:4px solid var(--green)}
+.callout-title{font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.callout.info .callout-title{color:#1d4ed8}
+.callout.warn .callout-title{color:#b45309}
+.callout.success .callout-title{color:#15803d}
+
+.exam-tip{background:#fffbeb;border:2px dashed #f59e0b;border-radius:var(--radius-sm);padding:16px 20px;margin:18px 0;font-size:0.93rem}
+.exam-tip::before{content:"⭐ Exam Tip: ";font-weight:700;color:#b45309}
+
+.example-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin:16px 0}
+.example-box .ex-label{font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.example-box h4{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:8px}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.compare-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px}
+.compare-card h4{font-family:var(--font-head);font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--accent-bg)}
+@media(max-width:900px){.compare{grid-template-columns:1fr}}
+
+table.data-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:0.88rem}
+table.data-table th{background:var(--navy);color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-family:var(--font-head)}
+table.data-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+table.data-table tr:nth-child(even) td{background:var(--bg)}
+table.data-table tr:hover td{background:var(--accent-bg)}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.badge{font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:20px}
+.badge.blue{background:var(--accent-bg);color:var(--accent)}
+.badge.green{background:#ecfdf5;color:#059669}
+.badge.amber{background:var(--amber-bg);color:#b45309}
+
+.watermark{position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;font-size:0.7rem;padding:6px 12px;border-radius:20px;opacity:.65;z-index:50;pointer-events:none}
+#btt{position:fixed;bottom:20px;left:20px;background:var(--accent);color:#fff;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:none;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:50;transition:all .2s}
+#btt:hover{background:var(--accent2)}
+#btt.show{display:flex}
+
+footer{background:var(--navy);color:#94a3b8;text-align:center;padding:28px;font-size:0.85rem;line-height:1.8}
+footer strong{color:#e2e8f0}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">SE Study <span>BSCS-3A</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="week1.html" class="active">Week 1</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="week1.html">📖 Week 1 – Introduction to SE</a>
+</div>
+
+<div class="page-hero">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Week 1</div>
+    <div class="chapter-badge">Week 1</div>
+    <h1>Introduction to Software Engineering</h1>
+    <p>Software fundamentals · Professional development · SE framework · SDLC activities</p>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h3>On this page</h3>
+    <a href="#lecture1">Lecture 1: Intro to SE</a>
+    <a href="#what-is-software" class="indent">What is Software</a>
+    <a href="#nature-of-software" class="indent">Nature of Software</a>
+    <a href="#persistent-questions" class="indent">Persistent Questions</a>
+    <a href="#software-products" class="indent">Software Products</a>
+    <a href="#software-types" class="indent">Software Types</a>
+    <a href="#changing-nature" class="indent">Changing Nature</a>
+    <a href="#lecture2">Lecture 2: Professional Dev</a>
+    <a href="#professional-vs-amateur" class="indent">Professional vs Amateur</a>
+    <a href="#good-software" class="indent">Good Software Attributes</a>
+    <a href="#se-definition" class="indent">SE Definition</a>
+    <a href="#cs-vs-se" class="indent">CS vs SE</a>
+    <a href="#importance" class="indent">Importance of SE</a>
+    <a href="#dev-activities" class="indent">Development Activities</a>
+    <a href="#se-framework" class="indent">SE Framework</a>
+    <a href="#software-process" class="indent">Software Process</a>
+    <a href="#process-issues" class="indent">Process Issues</a>
+    <a href="#system-types" class="indent">System Types</a>
+    <a href="#se-fundamentals" class="indent">SE Fundamentals</a>
+    <a href="#se-practices" class="indent">SE Practices</a>
+    <a href="#stakeholders" class="indent">Stakeholders</a>
+  </aside>
+
+  <main class="content">
+
+<h2 class="section-title" id="lecture1">Lecture 1: Introduction to Software Engineering</h2>
+
+<h3 class="sub-title" id="what-is-software">What is Software?</h3>
+
+<p>Software is more than just code. It is a complete system consisting of three main components that work together to deliver functionality.</p>
+
+<div class="def-box">
+  <div class="def-label">Definition: Software</div>
+  <p>Software includes the program (code), data (information processed), and documentation (manuals, specs, API references). It is not just the executable file.</p>
+</div>
+
+<div class="tag-row">
+  <span class="badge blue">Program</span>
+  <span class="badge green">Data</span>
+  <span class="badge amber">Documentation</span>
+</div>
+
+<ul>
+  <li><strong>Program</strong> — The actual code written in languages like Java, C++, Python, etc.</li>
+  <li><strong>Data</strong> — The information the program processes, such as user profiles, images, or database records.</li>
+  <li><strong>Documentation</strong> — All documents related to the software including user manuals, design documents, and API references.</li>
+</ul>
+
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Banking Application</h4>
+  <p><strong>Program:</strong> The code that handles login, balance check, and fund transfer.</p>
+  <p><strong>Data:</strong> Your account number, balance, and transaction history.</p>
+  <p><strong>Documentation:</strong> User guide, developer documentation, and installation guide.</p>
+</div>
+
+<div class="exam-tip">The three components of software (Program, Data, Documentation) is a common MCQ question. Remember that software is NOT just the program.</div>
+
+<h3 class="sub-title" id="nature-of-software">The Nature of Software</h3>
+
+<p>Software has a dual nature. It can be viewed both as a product itself and as a vehicle for delivering other products.</p>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>Software as a Product</h4>
+    <p>Delivers computing potential to users.</p>
+    <p>Produces, manages, acquires, modifies, displays, or transmits information.</p>
+    <p><strong>Example:</strong> Microsoft Word is a product that helps create and edit documents.</p>
+  </div>
+  <div class="compare-card">
+    <h4>Software as a Vehicle</h4>
+    <p>Supports other systems such as operating systems, networks, and tools.</p>
+    <p>Provides the platform for other software to run.</p>
+    <p><strong>Example:</strong> Windows OS is a vehicle that runs other software like games or browsers.</p>
+  </div>
+</div>
+
+<div class="callout info">
+  <div class="callout-title">Software Industry Today</div>
+  Modern software development involves teams of specialists working on complex systems. This is a shift from the lone programmer model of earlier times.
+</div>
+
+<h3 class="sub-title" id="persistent-questions">Persistent Questions in Software Development</h3>
+
+<p>Despite decades of progress in software engineering, certain fundamental questions remain challenging today just as they were in the past.</p>
+
+<table class="data-table">
+  <tr><th>Question</th><th>Why It Matters</th></tr>
+  <tr><td>Why does it take so long to finish software?</td><td>Complexity and changing requirements</td></tr>
+  <tr><td>Why are development costs so high?</td><td>Need for skilled labor, tools, and extensive testing</td></tr>
+  <tr><td>Why can't we find all errors before delivery?</td><td>Some bugs appear only in real-world use</td></tr>
+  <tr><td>Why so much time spent on maintenance?</td><td>Software evolves with user needs</td></tr>
+  <tr><td>Why is progress hard to measure?</td><td>Lack of physical tangibility</td></tr>
+</table>
+
+<div class="callout warn">
+  <div class="callout-title">Important Insight</div>
+  Maintenance often costs more than initial development. Fixing a bug after release can cost 100x more than fixing it during the design phase.
+</div>
+
+<h3 class="sub-title" id="software-products">Types of Software Products</h3>
+
+<p>Software products can be categorized based on who owns the specification and how they are distributed.</p>
+
+<table class="data-table">
+  <tr><th>Type</th><th>Description</th><th>Ownership of Spec</th><th>Example</th></tr>
+  <tr><td><strong>Generic (COTS)</strong></td><td>Commercial Off-The-Shelf, sold to any customer</td><td>Developer</td><td>MS Paint, Adobe Photoshop</td></tr>
+  <tr><td><strong>Customized (Bespoke)</strong></td><td>Made for a specific customer</td><td>Customer</td><td>Air traffic control system</td></tr>
+</table>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>Generic Software</h4>
+    <p>Same for everyone, cheaper, faster to get.</p>
+    <p>Specification is owned by the developer.</p>
+    <p>Mass-produced and widely available.</p>
+  </div>
+  <div class="compare-card">
+    <h4>Customized Software</h4>
+    <p>Unique, expensive, tailored exactly to needs.</p>
+    <p>Specification is owned by the customer.</p>
+    <p>Built specifically for one organization.</p>
+  </div>
+</div>
+
+<div class="exam-tip">The difference between Generic (COTS) and Customized (Bespoke) products is frequently asked. Focus on who owns the specification.</div>
+
+<h3 class="sub-title" id="software-types">Software Types by Application</h3>
+
+<table class="data-table">
+  <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+  <tr><td>System software</td><td>Operating systems, compilers, drivers</td><td>Windows, Linux</td></tr>
+  <tr><td>Application software</td><td>End-user programs</td><td>Excel, Zoom</td></tr>
+  <tr><td>Engineering/scientific</td><td>Math and simulation tools</td><td>MATLAB</td></tr>
+  <tr><td>Embedded software</td><td>Inside hardware devices</td><td>Car brake system</td></tr>
+  <tr><td>WebApps</td><td>Accessed via browser</td><td>Gmail, Google Docs</td></tr>
+  <tr><td>AI software</td><td>Learning and reasoning systems</td><td>ChatGPT, facial recognition</td></tr>
+</table>
+
+<h3 class="sub-title" id="changing-nature">Changing Nature of Software — Four Evolving Categories</h3>
+
+<h4 class="mini-title">a) WebApps</h4>
+
+<p>WebApps have evolved from static web pages with simple hyperlinks, images, and text into complex applications with interactivity, databases, and sophisticated business logic.</p>
+
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Google Docs</h4>
+  <p>Started as a simple online document editor. Now offers real-time collaboration, cloud storage, version history, commenting, and integration with other services.</p>
+</div>
+
+<h4 class="mini-title">b) Mobile Applications</h4>
+
+<p>Mobile apps are designed specifically for mobile platforms such as iOS, Android, and Windows Mobile. They feature interoperability with web services and local processing capabilities.</p>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>Mobile WebApp</h4>
+    <ul>
+      <li>Accessed via browser</li>
+      <li>No installation needed</li>
+      <li>Works across platforms</li>
+      <li>Limited hardware access</li>
+    </ul>
+  </div>
+  <div class="compare-card">
+    <h4>Mobile App</h4>
+    <ul>
+      <li>Installed on device</li>
+      <li>Takes storage space</li>
+      <li>Platform-specific</li>
+      <li>Full hardware access (camera, GPS)</li>
+    </ul>
+  </div>
+</div>
+
+<h4 class="mini-title">c) Cloud Computing</h4>
+
+<div class="def-box">
+  <div class="def-label">Definition: Cloud Computing</div>
+  <p>Cloud computing is an infrastructure or ecosystem that enables users to share computing resources from anywhere, providing scalable and on-demand services.</p>
+</div>
+
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Cloud Platforms</h4>
+  <p>AWS (Amazon Web Services), Google Cloud, and Microsoft Azure provide infrastructure, platforms, and software as services over the internet.</p>
+</div>
+
+<h4 class="mini-title">d) Product Line Software</h4>
+
+<p>Product line software refers to a set of software systems that share a common set of features for a specific market segment. These systems are developed from reusable core assets.</p>
+
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Android OS</h4>
+  <p>Android runs on different phone models. All share core Android features, but manufacturers like Samsung, OnePlus, and Google Pixel customize the OS with their own skins and features.</p>
+</div>
+
+<h2 class="section-title" id="lecture2">Lecture 2: Professional Software Development</h2>
+
+<h3 class="sub-title" id="professional-vs-amateur">Professional vs Amateur Software Development</h3>
+
+<table class="data-table">
+  <tr><th>Aspect</th><th>Professional</th><th>Amateur</th></tr>
+  <tr><td>Focus</td><td>Specification, design, evolution</td><td>Just coding</td></tr>
+  <tr><td>Team</td><td>Multiple roles</td><td>Lone programmer</td></tr>
+  <tr><td>Process</td><td>Systematic, disciplined</td><td>Ad-hoc</td></tr>
+  <tr><td>Quality</td><td>High, documented</td><td>Low, no docs</td></tr>
+  <tr><td>Maintenance</td><td>Planned</td><td>Ignored</td></tr>
+</table>
+
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Comparison</h4>
+  <p><strong>Amateur:</strong> A student writes a calculator app in an hour.</p>
+  <p><strong>Professional:</strong> A team spends weeks designing, coding, testing, documenting, and maintaining a banking system.</p>
+</div>
+
+<div class="exam-tip">Be able to contrast professional vs amateur development systematically. Focus on the process, team structure, and quality aspects.</div>
+
+<h3 class="sub-title" id="good-software">Attributes of Good Software</h3>
+
+<p>Good software must satisfy four key quality characteristics to be considered professional and reliable.</p>
+
+<div class="tag-row">
+  <span class="badge blue">Maintainability</span>
+  <span class="badge green">Dependability & Security</span>
+  <span class="badge amber">Efficiency</span>
+  <span class="badge blue">Acceptability</span>
+</div>
+
+<ol>
+  <li><strong>Maintainability</strong> — The software should be easy to change and adapt to new requirements.</li>
+  <li><strong>Dependability & Security</strong> — The software must be reliable, safe, and secure against threats.</li>
+  <li><strong>Efficiency</strong> — The software should not waste system resources like memory or CPU time.</li>
+  <li><strong>Acceptability</strong> — Users should like the software and be able to use it effectively.</li>
+</ol>
+
+<h3 class="sub-title" id="se-definition">Definition of Software Engineering</h3>
+
+<p>Software engineering has been defined in multiple ways by different organizations and experts. All definitions emphasize systematic approaches and engineering discipline.</p>
+
+<div class="def-box">
+  <div class="def-label">General Definition</div>
+  <p>An engineering discipline concerned with all aspects of software production, from initial specification to maintenance after deployment.</p>
+</div>
+
+<div class="def-box">
+  <div class="def-label">IEEE Definition</div>
+  <p>Application of a systematic, disciplined, quantifiable approach to the development, operation, and maintenance of software.</p>
+</div>
+
+<div class="def-box">
+  <div class="def-label">Another View</div>
+  <p>Establishment of sound engineering principles to obtain economical, reliable, and efficient software on real machines.</p>
+</div>
+
+<div class="callout info">
+  <div class="callout-title">Key Points</div>
+  <p><strong>Engineering discipline:</strong> Uses theories, methods, and tools to solve problems within organizational and financial constraints.</p>
+  <p><strong>All aspects:</strong> Not just coding, but also project management, tool development, and process management.</p>
+</div>
+
+<h3 class="sub-title" id="cs-vs-se">Computer Science vs Software Engineering</h3>
+
+<table class="data-table">
+  <tr><th>Computer Science</th><th>Software Engineering</th></tr>
+  <tr><td>Focuses on theory, algorithms, computation</td><td>Focuses on practical production of software</td></tr>
+  <tr><td>Asks: Can we solve this?</td><td>Asks: Can we build this on time and budget?</td></tr>
+  <tr><td>Example: New sorting algorithm</td><td>Example: Building an e-commerce website</td></tr>
+</table>
+
+<div class="def-box">
+  <div class="def-label">Relationship</div>
+  <p>Software Engineering is the process of utilizing our knowledge of computer science in the effective production of software systems.</p>
+</div>
+
+<h3 class="sub-title" id="system-vs-se">System Engineering vs Software Engineering</h3>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>System Engineering</h4>
+    <p>Deals with the entire system including hardware, software, people, and processes.</p>
+    <p><strong>Example:</strong> Designing a car (engine, brakes, software, assembly line).</p>
+  </div>
+  <div class="compare-card">
+    <h4>Software Engineering</h4>
+    <p>Focuses only on the software part of the system.</p>
+    <p><strong>Example:</strong> Designing only the car's infotainment software.</p>
+  </div>
+</div>
+
+<h3 class="sub-title" id="importance">Importance of Software Engineering</h3>
+
+<ul>
+  <li>Society relies on software, so it must be reliable and trustworthy.</li>
+  <li>Using SE methods is cheaper in the long run compared to ad-hoc development.</li>
+  <li>The majority of costs come from post-delivery changes and maintenance.</li>
+</ul>
+
+<div class="callout warn">
+  <div class="callout-title">Cost Reality</div>
+  Fixing a bug after release costs 100x more than fixing it during the design phase. This is why systematic SE processes are essential.
+</div>
+
+<h3 class="sub-title" id="dev-activities">Software Development Activities</h3>
+
+<p>Software development can be organized into different activity groupings depending on the perspective.</p>
+
+<h4 class="mini-title">Grouping 1: Technical Activities</h4>
+
+<ul>
+  <li>Project Management</li>
+  <li>Requirements Engineering</li>
+  <li>Design</li>
+  <li>Coding</li>
+  <li>Testing</li>
+  <li>Software Quality Assurance</li>
+  <li>Software Configuration Management</li>
+  <li>Software Integration</li>
+</ul>
+
+<h4 class="mini-title">Grouping 2: Management + Construction</h4>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>Management Activities</h4>
+    <ul>
+      <li>Project planning</li>
+      <li>Configuration management</li>
+      <li>Quality assurance</li>
+      <li>Installation</li>
+      <li>Training</li>
+    </ul>
+  </div>
+  <div class="compare-card">
+    <h4>Construction Activities</h4>
+    <ul>
+      <li>Requirements</li>
+      <li>Design</li>
+      <li>Coding</li>
+      <li>Testing</li>
+      <li>Maintenance</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub-title" id="dev-loop">Software Development Loop</h3>
+
+<p>Software development follows a simplified cyclical process:</p>
+
+<p><strong>Problem Definition → Technical Development → Solution Integration → Status Quo</strong> (then loop back)</p>
+
+<h3 class="sub-title" id="se-framework">A Software Engineering Framework (Layered Model)</h3>
+
+<div class="def-box">
+  <div class="def-label">The Layered Framework</div>
+  <p>Quality Focus (top layer) → Process → Methods → Tools (bottom layer)</p>
+</div>
+
+<ol>
+  <li><strong>Quality Focus</strong> — Organizational commitment to continuous improvement and quality standards.</li>
+  <li><strong>Process Layer</strong> — Foundation that defines the framework, including products, milestones, quality assurance, and change management.</li>
+  <li><strong>Methods</strong> — Technical "how-to's" for communication, analysis, design, coding, and testing.</li>
+  <li><strong>Tools (CASE)</strong> — Computer-Aided Software Engineering tools that provide automated support for process and methods.</li>
+</ol>
+
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Framework in Practice</h4>
+  <p><strong>Tools:</strong> Git (version control)</p>
+  <p><strong>Methods:</strong> Code reviews, design patterns</p>
+  <p><strong>Process:</strong> Agile methodology</p>
+  <p><strong>Quality Focus:</strong> ISO standards compliance</p>
+</div>
+
+<div class="exam-tip">Memorize the order of the layered framework: Quality → Process → Methods → Tools. This appears frequently in exams.</div>
+
+<h3 class="sub-title" id="software-process">Software Process — 4 Main Activities</h3>
+
+<table class="data-table">
+  <tr><th>Activity</th><th>Description</th></tr>
+  <tr><td>Specification</td><td>Define what the software must do and its constraints</td></tr>
+  <tr><td>Development</td><td>Design and program the software</td></tr>
+  <tr><td>Validation</td><td>Check if it meets customer requirements</td></tr>
+  <tr><td>Evolution</td><td>Modify the software for changing needs</td></tr>
+</table>
+
+<div class="exam-tip">The four software process activities (Specification, Development, Validation, Evolution) are commonly tested. Know them in order.</div>
+
+<h3 class="sub-title" id="process-issues">Software Process Issues (Challenges)</h3>
+
+<h4 class="mini-title">a) Heterogeneity</h4>
+<p>Systems must run on different devices and networks, and often integrate with legacy systems.</p>
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Cross-Platform Challenge</h4>
+  <p>An app running on iOS, Android, and Windows, while communicating with a 20-year-old mainframe system.</p>
+</div>
+
+<h4 class="mini-title">b) Business and Social Change</h4>
+<p>Markets demand faster delivery, but traditional development methods are slow.</p>
+
+<h4 class="mini-title">c) Security and Trust</h4>
+<p>Software must prevent attacks and maintain information security.</p>
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Banking Security</h4>
+  <p>A banking website must protect against hackers, implement encryption, and prevent unauthorized access to customer data.</p>
+</div>
+
+<h4 class="mini-title">d) Software Engineering Diversity</h4>
+<p>Different types of systems need different development approaches. There is no one-size-fits-all solution.</p>
+
+<h3 class="sub-title" id="system-types">Types of Systems (Software Engineering Diversity)</h3>
+
+<table class="data-table">
+  <tr><th>System Type</th><th>Description</th><th>Example</th></tr>
+  <tr><td>Stand-alone</td><td>Runs on local PC, no network needed</td><td>MS Paint, Calculator</td></tr>
+  <tr><td>Interactive transaction-based</td><td>Accessed remotely</td><td>Online banking</td></tr>
+  <tr><td>Embedded control</td><td>Controls hardware</td><td>Anti-lock braking system</td></tr>
+  <tr><td>Batch processing</td><td>Processes large data batches</td><td>Phone billing system</td></tr>
+  <tr><td>Entertainment</td><td>For personal fun</td><td>Video games</td></tr>
+  <tr><td>Modeling & simulation</td><td>Models physical processes</td><td>Weather simulation</td></tr>
+  <tr><td>Data collection</td><td>Collects data via sensors</td><td>Engine sensor system</td></tr>
+  <tr><td>Systems of systems</td><td>Composed of other software systems</td><td>Smart city platform</td></tr>
+</table>
+
+<div class="callout info">
+  <div class="callout-title">Key Point</div>
+  Different techniques are used for different systems. Embedded safety-critical systems require heavy verification, while WebApps use iterative development. But the fundamentals apply to all.
+</div>
+
+<h3 class="sub-title" id="se-fundamentals">Software Engineering Fundamentals (Universal Principles)</h3>
+
+<p>These principles apply to all types of software systems, regardless of development methodology.</p>
+
+<ol>
+  <li>Manage specification and requirements carefully.</li>
+  <li>Deliver software within budget and schedule.</li>
+  <li>Have a managed and understood development process.</li>
+  <li>Ensure dependability and performance.</li>
+  <li>Be effective with resources by reusing software components.</li>
+</ol>
+
+<h3 class="sub-title" id="se-practices">Software Engineering Practices (Four Steps)</h3>
+
+<ol>
+  <li><strong>Understand the Problem</strong> — Who are stakeholders? What are the unknowns? Can the problem be compartmentalized? Can we create an analysis model?</li>
+  <li><strong>Plan a Solution</strong> — Have we seen similar problems before? Are there reusable elements? Can we create a design model?</li>
+  <li><strong>Carry Out the Plan</strong> — Does the code follow the design? Is it traceable? Has it been reviewed or proven correct?</li>
+  <li><strong>Examine the Result</strong> — Can we test each part? Do we have a reasonable testing strategy? Has it been validated against requirements?</li>
+</ol>
+
+<h3 class="sub-title" id="stakeholders">Stakeholders in Software Engineering</h3>
+
+<div class="def-box">
+  <div class="def-label">Definition: Stakeholder</div>
+  <p>Anyone with a stake in the project's success. This includes users, customers, developers, and managers.</p>
+</div>
+
+<ul>
+  <li><strong>Users</strong> — People who actually use the software.</li>
+  <li><strong>Customers</strong> — People who pay for or request the software.</li>
+  <li><strong>Software developers</strong> — People who build the software.</li>
+  <li><strong>Development managers</strong> — People who oversee the development process.</li>
+</ul>
+
+<div class="example-box">
+  <div class="ex-label">📌 Example</div>
+  <h4>Hospital System Stakeholders</h4>
+  <p><strong>Users:</strong> Doctors, nurses</p>
+  <p><strong>Customers:</strong> Hospital administration</p>
+  <p><strong>Developers:</strong> Programmers</p>
+  <p><strong>Managers:</strong> Project leads</p>
+</div>
+
+<div class="exam-tip">Always include users, customers, developers, and managers when asked about stakeholders.</div>
+
+  </main>
+</div>
+
+<footer>
+  <strong>Software Engineering Study Guide</strong><br>
+  BSCS-3A &nbsp;·&nbsp; Compiled by <strong>Abdul Raheem</strong> &nbsp;·&nbsp; Air University Islamabad
+</footer>
+
+<div class="watermark">Abdul Raheem · BSCS-3A</div>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<script>
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
+      const id=e.target.getAttribute('id');
+      const link=document.querySelector(`.sidebar a[href="#${id}"]`);
+      if(link)link.classList.add('active');
+    }
+  })
+},{rootMargin:'-20% 0px -70% 0px'});
+document.querySelectorAll('h2[id],h3[id]').forEach(el=>observer.observe(el));
+
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open')}
+window.addEventListener('scroll',()=>{document.getElementById('btt').classList.toggle('show',window.scrollY>300)})
+</script>
+
+</body>
+</html>
