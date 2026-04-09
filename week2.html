@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 - SDLC & Agile Software Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root {
+  --navy:#0f0a0a; --navy2:#1f1015; --navy3:#3d1a24;
+  --accent:#f43f5e; --accent2:#fb7185; --accent-bg:#fff1f2;
+  --white:#ffffff; --bg:#fdf8f9; --surface:#ffffff;
+  --border:#fecdd3; --text:#0f0a0a; --muted:#9f4458; --light:#fda4af;
+  --green:#10b981; --amber:#f59e0b; --red:#ef4444; --amber-bg:#fffbeb;
+  --font-body:'Inter',sans-serif; --font-head:'Plus Jakarta Sans',sans-serif;
+  --radius:12px; --radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08); --shadow-md:0 4px 16px rgba(0,0,0,.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:16px;line-height:1.75}
+h2.section-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;color:var(--navy);margin:48px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--border);scroll-margin-top:80px}
+h2.section-title:first-child{margin-top:0}
+h3.sub-title{font-family:var(--font-head);font-size:1.15rem;font-weight:700;color:var(--navy2);margin:28px 0 10px;scroll-margin-top:80px}
+h4.mini-title{font-size:0.95rem;font-weight:600;color:var(--navy3);margin:20px 0 8px}
+p{margin-bottom:12px;color:#1e293b}
+ul,ol{padding-left:22px;margin-bottom:14px}
+li{margin-bottom:6px;color:#1e293b}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:var(--font-head);font-weight:700;font-size:1.05rem;color:var(--navy);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-brand span{background:var(--accent);color:#fff;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-family:var(--font-body);font-weight:600}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{font-size:0.85rem;font-weight:500;color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:var(--radius-sm);transition:all .2s}
+.nav-links a:hover,.nav-links a.active{background:var(--accent-bg);color:var(--accent)}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;color:var(--navy)}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--border);padding:16px;z-index:99;flex-direction:column;gap:4px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.9rem;font-weight:500;color:var(--muted);text-decoration:none;padding:10px 14px;border-radius:var(--radius-sm)}
+.mobile-menu a:hover{background:var(--accent-bg);color:var(--accent)}
+@media(max-width:768px){nav{padding:0 16px}.nav-links{display:none}.hamburger{display:block}}
+
+.page-hero{background:var(--navy);color:#fff;padding:52px 32px 40px;border-bottom:1px solid var(--navy2)}
+.page-hero .breadcrumb{font-size:0.8rem;color:#64748b;margin-bottom:12px}
+.page-hero .breadcrumb a{color:var(--accent2);text-decoration:none}
+.page-hero h1{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.page-hero p{color:#94a3b8;margin-top:10px;font-size:1rem;max-width:620px}
+.chapter-badge{display:inline-block;background:rgba(244,63,94,.25);border:1px solid rgba(244,63,94,.4);color:var(--accent2);font-size:0.75rem;font-weight:600;padding:4px 14px;border-radius:20px;margin-bottom:16px}
+
+.layout{display:flex;max-width:1200px;margin:0 auto;min-height:calc(100vh - 60px)}
+.sidebar{width:260px;flex-shrink:0;padding:28px 20px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;border-right:1px solid var(--border);background:#fff}
+.sidebar h3{font-size:0.7rem;font-weight:700;color:var(--light);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;padding-left:8px}
+.sidebar a{display:block;font-size:0.85rem;color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:var(--radius-sm);margin-bottom:2px;transition:all .2s;border-left:2px solid transparent}
+.sidebar a:hover{background:var(--accent-bg);color:var(--accent)}
+.sidebar a.active{background:var(--accent-bg);color:var(--accent);border-left-color:var(--accent);font-weight:500}
+.sidebar a.indent{padding-left:24px;font-size:0.8rem}
+.content{flex:1;padding:40px 48px;max-width:820px;min-width:0}
+@media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);padding:16px 20px}.content{padding:28px 20px}}
+
+.def-box{background:var(--navy);color:#fff;border-radius:var(--radius);padding:22px 28px;margin:20px 0}
+.def-box .def-label{font-size:0.72rem;font-weight:700;color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.def-box p{color:#cbd5e1;font-size:1rem;margin:0;line-height:1.7}
+
+.callout{border-radius:var(--radius-sm);padding:16px 20px;margin:18px 0;font-size:0.93rem}
+.callout.info{background:#eff6ff;border-left:4px solid #3b82f6}
+.callout.warn{background:var(--amber-bg);border-left:4px solid var(--amber)}
+.callout.success{background:#f0fdf4;border-left:4px solid var(--green)}
+.callout-title{font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.callout.info .callout-title{color:#1d4ed8}
+.callout.warn .callout-title{color:#b45309}
+.callout.success .callout-title{color:#15803d}
+
+.exam-tip{background:#fffbeb;border:2px dashed #f59e0b;border-radius:var(--radius-sm);padding:16px 20px;margin:18px 0;font-size:0.93rem}
+.exam-tip::before{content:"⭐ Exam Tip: ";font-weight:700;color:#b45309}
+
+.example-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin:16px 0}
+.example-box .ex-label{font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.example-box h4{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:8px}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.compare-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px}
+.compare-card h4{font-family:var(--font-head);font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--accent-bg)}
+@media(max-width:900px){.compare{grid-template-columns:1fr}}
+
+table.data-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:0.88rem}
+table.data-table th{background:var(--navy);color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-family:var(--font-head)}
+table.data-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+table.data-table tr:nth-child(even) td{background:var(--bg)}
+table.data-table tr:hover td{background:var(--accent-bg)}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.badge{font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:20px}
+.badge.blue{background:var(--accent-bg);color:var(--accent)}
+.badge.green{background:#ecfdf5;color:#059669}
+.badge.amber{background:var(--amber-bg);color:#b45309}
+
+.watermark{position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;font-size:0.7rem;padding:6px 12px;border-radius:20px;opacity:.65;z-index:50;pointer-events:none}
+#btt{position:fixed;bottom:20px;left:20px;background:var(--accent);color:#fff;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:none;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:50;transition:all .2s}
+#btt:hover{background:var(--accent2)}
+#btt.show{display:flex}
+
+footer{background:var(--navy);color:#94a3b8;text-align:center;padding:28px;font-size:0.85rem;line-height:1.8}
+footer strong{color:#e2e8f0}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">SE Study <span>BSCS-3A</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="week1.html">Week 1</a>
+    <a href="week2.html" class="active">Week 2</a>
+    <a href="week3.html">Week 3</a>
+    <a href="week4.html">Week 4</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="week1.html">📖 Week 1 – Introduction to SE</a>
+  <a href="week2.html">📖 Week 2 – SDLC & Agile</a>
+  <a href="week3.html">📖 Week 3 – Requirements Engineering</a>
+  <a href="week4.html">📖 Week 4 – Use Case Diagrams</a>
+</div>
+
+<div class="page-hero">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Week 2</div>
+    <div class="chapter-badge">Week 2</div>
+    <h1>SDLC & Agile Software Development</h1>
+    <p>Software Development Life Cycle · Process Models · Agile Principles · XP · Scrum · Kanban</p>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h3>On this page</h3>
+    <a href="#lecture34">Lecture 3‑4: SDLC & Process Models</a>
+    <a href="#sdlc-definition" class="indent">SDLC Definition</a>
+    <a href="#sdlc-phases" class="indent">SDLC Phases (10)</a>
+    <a href="#process-models" class="indent">Process Models Overview</a>
+    <a href="#waterfall-model" class="indent">Waterfall Model</a>
+    <a href="#v-model" class="indent">V Model</a>
+    <a href="#incremental-model" class="indent">Incremental Model</a>
+    <a href="#evolutionary-model" class="indent">Evolutionary (Prototyping)</a>
+    <a href="#spiral-model" class="indent">Spiral Model</a>
+    <a href="#model-comparison" class="indent">Model Comparison</a>
+    <a href="#lecture56">Lecture 5‑6: Agile Development</a>
+    <a href="#rapid-development" class="indent">Rapid Development</a>
+    <a href="#agile-characteristics" class="indent">Agile Characteristics</a>
+    <a href="#agile-manifesto" class="indent">Agile Manifesto</a>
+    <a href="#agile-applicability" class="indent">Agile Applicability</a>
+    <a href="#plan-vs-agile" class="indent">Plan‑Driven vs Agile</a>
+    <a href="#extreme-programming" class="indent">Extreme Programming (XP)</a>
+    <a href="#scrum" class="indent">Scrum</a>
+    <a href="#kanban" class="indent">Kanban</a>
+    <a href="#scrum-vs-kanban" class="indent">Scrum vs Kanban</a>
+    <a href="#activity-solution" class="indent">Activity Solution</a>
+    <a href="#exam-tips" class="indent">Exam Tips</a>
+  </aside>
+
+  <main class="content">
+
+<h2 class="section-title" id="lecture34">Lecture 3‑4: Software Development Life Cycle (SDLC) and Process Models</h2>
+
+<h3 class="sub-title" id="sdlc-definition">SDLC Definition</h3>
+
+<p>The Software Development Life Cycle (SDLC) is a well‑defined, structured sequence of stages in software engineering to develop the intended software product efficiently. It provides a series of steps to be followed to design and develop a software product.</p>
+
+<div class="def-box">
+  <div class="def-label">Definition: SDLC</div>
+  <p>A framework that describes the activities performed at each stage of a software development project, from initial concept through deployment and maintenance.</p>
+</div>
+
+<h3 class="sub-title" id="sdlc-phases">SDLC Phases (10 Phases)</h3>
+
+<p>The SDLC typically consists of ten distinct phases, though the exact number can vary depending on the source.</p>
+
+<ol>
+  <li><strong>Communication</strong> — User initiates request for software product, negotiates terms, and submits request in writing.</li>
+  <li><strong>Requirement Gathering</strong> — Collect requirements via observation, studying existing systems, questionnaires, and interviews.</li>
+  <li><strong>Feasibility Study</strong> — Analyze if software can fulfill all user requirements; segregate into user, functional, and system requirements.</li>
+  <li><strong>System Analysis</strong> — Decide roadmap and choose suitable software model; understand limitations, system problems, and organizational impact.</li>
+  <li><strong>Software Design</strong> — Combine requirements and analysis to produce logical and physical designs (data dictionaries, diagrams, pseudo‑code).</li>
+  <li><strong>Coding</strong> — Implementation of design by writing program code in a suitable programming language.</li>
+  <li><strong>Testing</strong> — Conduct thorough testing at various levels (module, program, product, in‑house, user) to discover errors early.</li>
+  <li><strong>Integration</strong> — Integrate software with libraries, databases, and other external programs.</li>
+  <li><strong>Deployment</strong> — Install software on user machines; test for portability and adaptability.</li>
+  <li><strong>Operation and Maintenance</strong> — Ensure efficient operation with fewer errors; provide training and update code as environment changes.</li>
+</ol>
+
+<h3 class="sub-title" id="process-models">Process Models Overview</h3>
+
+<p>The main process models covered are:</p>
+
+<ul>
+  <li>Waterfall Model</li>
+  <li>V Model</li>
+  <li>Incremental Model</li>
+  <li>Evolutionary Model (Prototyping)</li>
+  <li>Spiral Model</li>
+</ul>
+
+<h4 class="mini-title" id="waterfall-model">Waterfall Model</h4>
+
+<p>The waterfall model, sometimes called the classic life cycle, suggests a systematic, sequential approach to software development. It was the first process model to be introduced and followed widely in software engineering. The whole process is divided into separate phases in linear order.</p>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>Advantages</h4>
+    <ul>
+      <li>Simple and easy to understand and use</li>
+      <li>Easy to manage – each phase has specific deliverables and a review process</li>
+      <li>Phases are processed and completed one at a time; phases do not overlap</li>
+      <li>Works well for smaller projects where requirements are clearly defined and well understood</li>
+    </ul>
+  </div>
+  <div class="compare-card">
+    <h4>Disadvantages</h4>
+    <ul>
+      <li>Real projects rarely follow the sequential flow; changes can cause confusion</li>
+      <li>Difficult for customers to state all requirements explicitly; model cannot accommodate natural uncertainty</li>
+      <li>Customer must have patience; working version is not available until late in the project</li>
+      <li>Linear nature leads to "blocking states" where team members must wait for dependent tasks</li>
+      <li>Once in testing stage, it is very difficult to go back and change something not well thought out</li>
+      <li>No working software is produced until late in the life cycle</li>
+      <li>High amounts of risk and uncertainty</li>
+      <li>Not good for complex and object‑oriented projects</li>
+      <li>Poor model for long and ongoing projects</li>
+      <li>Not suitable for projects where requirements are at moderate to high risk of changing</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout info">
+  <div class="callout-title">When to Use Waterfall</div>
+  <p>Requirements are very well known, clear, and fixed; product definition is stable; technology is understood; there are no ambiguous requirements; good resources with required expertise are available freely; the project is short.</p>
+</div>
+
+<h4 class="mini-title" id="v-model">V Model</h4>
+
+<p>As a software team moves down the left side of the V, basic problem requirements are refined into progressively more detailed and technical representations. Once code has been generated, the team moves up the right side of the V, performing a series of tests (quality assurance actions) that validate each of the models created. In reality, there is no fundamental difference between the classic life cycle and the V‑model. The V‑model provides a way of visualizing how verification and validation actions are applied to earlier engineering work.</p>
+
+<div class="example-box">
+  <div class="ex-label">Example</div>
+  <h4>Hospital System</h4>
+  <p>The left side of the V defines requirements and design, while the right side validates each level through unit testing, integration testing, system testing, and acceptance testing.</p>
+</div>
+
+<h4 class="mini-title" id="incremental-model">Incremental Model</h4>
+
+<p>Also known as the Successive Version model. First, a simple working system implementing only a few basic features is built and delivered to the customer. Then many successive iterations/versions are implemented and delivered until the desired system is released.</p>
+
+<div class="callout warn">
+  <div class="callout-title">Life Cycle Activities</div>
+  <ul>
+    <li>Requirements are broken down into several modules that can be incrementally constructed and delivered</li>
+    <li>At any time, the plan is made just for the next increment, not for long‑term plans</li>
+    <li>Development team first undertakes to develop core features (those that do not need services from other features)</li>
+    <li>Once core features are fully developed, they are refined to increase levels of capability by adding new functions in successive versions</li>
+    <li>Each incremental version is usually developed using an iterative waterfall model</li>
+    <li>Customer feedback is taken and incorporated into the next version</li>
+    <li>Each version has more additional features over previous ones</li>
+  </ul>
+</div>
+
+<div class="example-box">
+  <div class="ex-label">Example</div>
+  <h4>Modules A, B, C</h4>
+  <p>Version 1 has only module A. Version 2 has A and B. Version 3 has A, B, and C.</p>
+</div>
+
+<h4 class="mini-title" id="evolutionary-model">Evolutionary (Prototyping) Model</h4>
+
+<p>Prototyping is the process of quickly putting together a working model (a prototype) to test various aspects of a design, illustrate ideas or features, and gather early user feedback. Prototyping is often treated as an integral part of the system design process, believed to reduce project risk and cost. The prototyping model suggests that before carrying out development of actual software, a working prototype of the system is built.</p>
+
+<div class="def-box">
+  <div class="def-label">What is a Prototype?</div>
+  <p>A prototype is a toy implementation of a system having limited functional capabilities, low reliability, and inefficient performance. Its purpose is to illustrate input data formats, reports, and interactive dialog to the customer.</p>
+</div>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>Advantages of Prototyping</h4>
+    <ul>
+      <li>Flexible in design</li>
+      <li>Easy to detect errors</li>
+      <li>Can find missing functionality easily</li>
+      <li>Scope for refinement; new requirements can be easily accommodated</li>
+      <li>Ensures greater level of customer satisfaction and comfort</li>
+      <li>Helps developers and users both understand the system better</li>
+    </ul>
+  </div>
+  <div class="compare-card">
+    <h4>Disadvantages of Prototyping</h4>
+    <ul>
+      <li>Costly</li>
+      <li>Poor documentation because of continuously changing customer requirements</li>
+      <li>Too much variation in requirements possible</li>
+      <li>Customers sometimes demand actual product to be delivered soon after seeing an early prototype</li>
+      <li>Incomplete or inadequate problem analysis possible</li>
+      <li>May increase complexity of the system</li>
+    </ul>
+  </div>
+</div>
+
+<h4 class="mini-title" id="spiral-model">Spiral Model</h4>
+
+<p>The spiral model is one of the most important SDLC models, providing support for Risk Handling. In its diagrammatic representation, it looks like a spiral with many loops. The exact number of loops is unknown and can vary from project to project. Each loop of the spiral is called a Phase of the software development process. The project manager dynamically determines the number of phases depending upon project risks.</p>
+
+<div class="callout info">
+  <div class="callout-title">Risk Handling in Spiral Model</div>
+  <p>A risk is any adverse situation that might affect successful completion of a software project. The most important feature of the spiral model is handling unknown risks after the project has started. Such risk resolutions are easier done by developing a prototype. The spiral model supports coping with risks by providing scope to build a prototype at every phase.</p>
+</div>
+
+<h4 class="mini-title">Four Quadrants of Each Spiral Phase</h4>
+
+<ol>
+  <li><strong>Objectives determination and identify alternative solutions</strong> — Requirements are gathered from customers, objectives are identified, elaborated, and analyzed at the start of every phase. Alternative solutions possible for the phase are proposed.</li>
+  <li><strong>Identify and resolve Risks</strong> — All possible solutions are evaluated to select the best possible solution. Risks associated with that solution are identified and resolved using the best possible strategy. At the end of this quadrant, a prototype is built for the best possible solution.</li>
+  <li><strong>Develop next version of the Product</strong> — Identified features are developed and verified through testing. At the end of this quadrant, the next version of the software is available.</li>
+  <li><strong>Review and plan for the next Phase</strong> — Customers evaluate the so‑far developed version of the software. Planning for the next phase is started.</li>
+</ol>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>Advantages of Spiral Model</h4>
+    <ul>
+      <li><strong>Risk Handling</strong> — Projects with many unknown risks are best handled using this model due to risk analysis and handling at every phase</li>
+      <li><strong>Good for large projects</strong> — Recommended for large and complex projects</li>
+      <li><strong>Flexibility in Requirements</strong> — Change requests at later phases can be incorporated accurately</li>
+      <li><strong>Customer Satisfaction</strong> — Customer can see development at early phases and becomes habituated with the system</li>
+    </ul>
+  </div>
+  <div class="compare-card">
+    <h4>Disadvantages of Spiral Model</h4>
+    <ul>
+      <li><strong>Complex</strong> — Much more complex than other SDLC models</li>
+      <li><strong>Expensive</strong> — Not suitable for small projects</li>
+      <li><strong>Too much dependability on Risk Analysis</strong> — Without highly experienced experts, project is likely to fail</li>
+      <li><strong>Difficulty in time management</strong> — Number of phases is unknown at the start, so time estimation is very difficult</li>
+    </ul>
+  </div>
+</div>
+
+<h4 class="mini-title" id="model-comparison">Model Comparison</h4>
+
+<table class="data-table">
+  <thead>
+    <tr><th>Feature</th><th>Waterfall</th><th>V‑Model</th><th>Incremental</th><th>Prototyping</th><th>Spiral</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Approach</strong></td><td>Sequential</td><td>Sequential with validation</td><td>Iterative delivery</td><td>Build‑test‑refine</td><td>Cyclical risk‑driven</td></tr>
+    <tr><td><strong>Risk handling</strong></td><td>Poor</td><td>Poor</td><td>Medium</td><td>Medium</td><td>Excellent</td></tr>
+    <tr><td><strong>Customer involvement</strong></td><td>Low</td><td>Low</td><td>High</td><td>Very High</td><td>High</td></tr>
+    <tr><td><strong>Documentation</strong></td><td>Heavy</td><td>Heavy</td><td>Medium</td><td>Low</td><td>Medium</td></tr>
+    <tr><td><strong>Best for</strong></td><td>Small, clear requirements</td><td>Safety‑critical systems</td><td>Large systems with clear modules</td><td>Unclear requirements</td><td>Large, high‑risk projects</td></tr>
+    <tr><td><strong>Working software availability</strong></td><td>Late</td><td>Late</td><td>Early (partial)</td><td>Early (prototype)</td><td>Early (prototype)</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title" id="lecture56">Lecture 5‑6: Agile Software Development</h2>
+
+<h3 class="sub-title" id="rapid-development">Rapid Software Development – Why It Matters</h3>
+
+<p>Rapid development and delivery is now often the most important requirement for software systems. Businesses operate in a fast‑changing requirement environment, and it is practically impossible to produce a set of stable software requirements. Software has to evolve quickly to reflect changing business needs. Rapid software development processes are designed to produce useful software quickly. The software is not developed as a single unit but as a series of increments, with each increment including new system functionality.</p>
+
+<h3 class="sub-title" id="agile-characteristics">Fundamental Characteristics of Agile Process</h3>
+
+<ul>
+  <li>Specification, design, and implementation are interleaved</li>
+  <li>No detailed system specification</li>
+  <li>Design documentation is minimized</li>
+  <li>User requirements document only defines important characteristics of the system</li>
+  <li>System is developed as a series of versions with stakeholders involved in version evaluation</li>
+  <li>Users propose changes and new requirements for later versions</li>
+  <li>User interfaces are often developed using an IDE and graphical toolset</li>
+</ul>
+
+<h3 class="sub-title" id="agile-manifesto">Agile Manifesto (Four Core Values)</h3>
+
+<div class="def-box">
+  <div class="def-label">Agile Manifesto</div>
+  <p><strong>Individuals and interactions</strong> over processes and tools<br>
+  <strong>Working software</strong> over comprehensive documentation<br>
+  <strong>Customer collaboration</strong> over contract negotiation<br>
+  <strong>Responding to change</strong> over following a plan</p>
+</div>
+
+<h3 class="sub-title" id="agile-applicability">Agile Method Applicability</h3>
+
+<p>Agile methods are applicable for:</p>
+
+<ul>
+  <li>Product development where a software company is developing a small or medium‑sized product for sale</li>
+  <li>Custom system development within an organization where there is clear commitment from the customer to become involved</li>
+  <li>Projects where there are not a lot of external rules and regulations affecting the software</li>
+</ul>
+
+<div class="callout warn">
+  <div class="callout-title">Problems with Agile Methods</div>
+  <ul>
+    <li>Difficulty keeping the interest of customers involved in the process</li>
+    <li>Team members may be unsuited to intense involvement</li>
+    <li>Prioritizing changes can be difficult where there are multiple stakeholders</li>
+    <li>Contracts may be a problem (requirements document is part of contract)</li>
+    <li>Organizations that have spent years formalizing processes find it difficult to adopt informal process models</li>
+  </ul>
+</div>
+
+<h3 class="sub-title" id="plan-vs-agile">Plan‑Driven vs Agile Development</h3>
+
+<table class="data-table">
+  <thead><tr><th>Aspect</th><th>Plan‑Driven</th><th>Agile</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Approach</strong></td><td>Separate development stages planned in advance</td><td>Specification, design, implementation interleaved</td></tr>
+    <tr><td><strong>Outputs</strong></td><td>Planned in advance</td><td>Decided through negotiation during process</td></tr>
+    <tr><td><strong>Iteration</strong></td><td>Occurs within activities</td><td>Occurs across all activities</td></tr>
+    <tr><td><strong>Documentation</strong></td><td>Heavy</td><td>Minimal</td></tr>
+    <tr><td><strong>Customer involvement</strong></td><td>Low</td><td>High</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title" id="extreme-programming">Extreme Programming (XP)</h3>
+
+<p>Perhaps the best‑known and most widely used agile method. XP takes an 'extreme' approach to iterative development:</p>
+
+<ul>
+  <li>New versions may be built several times per day</li>
+  <li>Increments are delivered to customers every 2 weeks</li>
+  <li>All tests must be run for every build, and the build is only accepted if tests run successfully</li>
+</ul>
+
+<div class="callout info">
+  <div class="callout-title">XP Practices</div>
+  <ul>
+    <li><strong>Planning</strong> – Customer writes user stories; team breaks them into tasks.</li>
+    <li><strong>Design</strong> – Uses CRC cards, spikes, and refactoring.</li>
+    <li><strong>Coding</strong> – Pair programming, test‑first development.</li>
+    <li><strong>Testing</strong> – Automated tests, user involvement in validation.</li>
+  </ul>
+</div>
+
+<div class="example-box">
+  <div class="ex-label">CRC Card Example (Student Registration System)</div>
+  <h4>Class: Student</h4>
+  <p><strong>Responsibilities:</strong> Manage student profile information, enrol in courses, view registration status, drop or modify course enrolment<br>
+  <strong>Collaborators:</strong> Course, Registration, Department, Payment</p>
+</div>
+
+<div class="exam-tip">
+  Test‑first development follows four steps: Write the test, run the test (initially fails), write code to pass the test, refactor code.
+</div>
+
+<h3 class="sub-title" id="scrum">Scrum</h3>
+
+<p>Scrum is an iterative and incremental Agile framework focusing on managing iterative development.</p>
+
+<div class="compare">
+  <div class="compare-card">
+    <h4>Three Phases of Scrum</h4>
+    <ol>
+      <li><strong>Outline planning phase</strong> – Establish general objectives and design software architecture</li>
+      <li><strong>Sprint cycles</strong> – Series of cycles (2‑4 weeks each) developing an increment</li>
+      <li><strong>Project closure phase</strong> – Wrap up project, complete documentation, assess lessons learned</li>
+    </ol>
+  </div>
+  <div class="compare-card">
+    <h4>Key Roles</h4>
+    <ul>
+      <li><strong>Scrum Master</strong> – Facilitator, arranges daily meetings, tracks backlog</li>
+      <li><strong>Product Owner</strong> – Manages Product Backlog, makes final decisions</li>
+      <li><strong>Scrum Team</strong> – Self‑organizing team that develops the product</li>
+      <li><strong>Customer</strong> – Participates in backlog items</li>
+      <li><strong>Management</strong> – Final decision making, selects Product Owner</li>
+    </ul>
+  </div>
+</div>
+
+<h4 class="mini-title">The Sprint Cycle (Four Phases)</h4>
+
+<ol>
+  <li><strong>Assess Phase</strong> – Review product backlog, assign priorities and risks</li>
+  <li><strong>Selection Phase</strong> – Select features to be developed during the sprint</li>
+  <li><strong>Develop Phase</strong> – Team develops software, isolated from distractions</li>
+  <li><strong>Review Phase</strong> – Present work to stakeholders, gather feedback</li>
+</ol>
+
+<div class="callout success">
+  <div class="callout-title">Daily Scrum Meeting (15 minutes)</div>
+  <p>Each team member answers three questions:</p>
+  <ul>
+    <li>What did you do since the last team meeting?</li>
+    <li>What obstacles are you encountering?</li>
+    <li>What do you plan to accomplish by the next team meeting?</li>
+  </ul>
+</div>
+
+<h3 class="sub-title" id="kanban">Kanban Software Development</h3>
+
+<p>Kanban is an Agile workflow management method that visualizes work and focuses on continuous delivery without overloading the team. Core idea: See the work, limit work in progress (WIP), and improve flow.</p>
+
+<div class="callout info">
+  <div class="callout-title">Key Principles of Kanban</div>
+  <ul>
+    <li>Visualize Work – Use a Kanban board to track progress</li>
+    <li>Limit Work in Progress (WIP) – Prevent task overload</li>
+    <li>Focus on Flow – Continuously improve processes and remove bottlenecks</li>
+    <li>Explicit Policies – Clear guidelines for processes</li>
+    <li>Continuous Improvement – Regular feedback and adjustments</li>
+  </ul>
+</div>
+
+<div class="example-box">
+  <div class="ex-label">Kanban Board Columns</div>
+  <p>Backlog → Analysis → Development → Test Board → Deploy Task → Done</p>
+</div>
+
+<h3 class="sub-title" id="scrum-vs-kanban">Scrum vs Kanban (Key Differences)</h3>
+
+<table class="data-table">
+  <thead><tr><th>Feature</th><th>Scrum</th><th>Kanban</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Structure</strong></td><td>Fixed‑length sprints (2‑4 weeks)</td><td>Continuous flow</div></tr>
+    <tr><td><strong>Roles</strong></td><td>Specific roles (Scrum Master, Product Owner)</div><td>No specific roles required</div></tr>
+    <tr><td><strong>Work limits</strong></div><td>Based on sprint capacity</div><td>Work in Progress (WIP) limits</div></tr>
+    <tr><td><strong>Changes</strong></div><td>No changes during sprint</div><td>Changes can be made anytime</div></tr>
+    <tr><td><strong>Metrics</strong></div><td>Velocity, sprint burndown</div><td>Lead time, cycle time, throughput</div></tr>
+    <tr><td><strong>Best for</strong></div><td>Projects with changing priorities</div><td>Support and maintenance work</div></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title" id="activity-solution">Week 2 Activity Solution – Software Process Models</h3>
+
+<p>Group‑wise correct models for various scenarios:</p>
+
+<table class="data-table">
+  <thead><tr><th>Group</th><th>Scenario</th><th>Best Model</th><th>Acceptable Alternatives</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>NADRA Citizen System</td><td>V‑Model</td><td>Waterfall</td></tr>
+    <tr><td>2</td><td>Food Delivery Startup</td><td>Agile (Scrum)</td><td>—</td></tr>
+    <tr><td>3</td><td>University LMS</td><td>Incremental</td><td>Agile</td></tr>
+    <tr><td>4</td><td>Banking Upgrade</td><td>Spiral</td><td>—</td></tr>
+    <tr><td>5</td><td>Hospital System</td><td>V‑Model</td><td>Waterfall</td></tr>
+    <tr><td>6</td><td>FYP (BSCS)</td><td>Agile</td><td>Incremental</td></tr>
+    <tr><td>7</td><td>E‑Commerce Brand</td><td>Incremental</td><td>Agile</td></tr>
+    <tr><td>8</td><td>Govt Tax System</td><td>Waterfall</td><td>V‑Model</td></tr>
+    <tr><td>9</td><td>Ride‑Hailing App</td><td>Agile</td><td>—</td></tr>
+    <tr><td>10</td><td>School Management</td><td>Incremental</td><td>—</td></tr>
+    <tr><td>11</td><td>AI Recommendation</td><td>Spiral</td><td>Agile</td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <div class="callout-title">Key Takeaways</div>
+  <ul>
+    <li>No single best model fits all projects</li>
+    <li>High‑risk systems → Spiral / V‑Model</li>
+    <li>Changing requirements → Agile</li>
+    <li>Phased delivery → Incremental</li>
+    <li>Legal / compliance‑heavy → Waterfall / V‑Model</li>
+  </ul>
+</div>
+
+<h3 class="sub-title" id="exam-tips">Exam Tips for SDLC and Agile</h3>
+
+<div class="exam-tip">
+  Memorize the 10 SDLC phases in order (Communication, Requirement Gathering, Feasibility Study, System Analysis, Software Design, Coding, Testing, Integration, Deployment, Operations & Maintenance).
+</div>
+
+<div class="exam-tip">
+  Know which model to choose for which scenario: Waterfall (clear, fixed requirements), V‑Model (safety‑critical), Incremental (large system with modules), Prototyping (unclear requirements), Spiral (high‑risk, large projects), Agile/XP/Scrum (changing requirements), Kanban (continuous flow).
+</div>
+
+<div class="exam-tip">
+  Agile Manifesto four values – memorize exactly as written.
+</div>
+
+<div class="exam-tip">
+  XP Practices – planning, design (CRC cards, spikes, refactoring), coding (pair programming, test‑first), testing (automated, JUnit).
+</div>
+
+<div class="exam-tip">
+  Scrum roles – Scrum Master, Product Owner, Scrum Team, Customer, Management – know responsibilities of each.
+</div>
+
+<div class="exam-tip">
+  Sprint cycle phases – Assess, Selection, Develop, Review.
+</div>
+
+<div class="exam-tip">
+  Daily Scrum three questions – what did you do, what obstacles, what will you do.
+</div>
+
+<div class="exam-tip">
+  Kanban principles – visualize work, limit WIP, focus on flow, explicit policies, continuous improvement.
+</div>
+
+  </main>
+</div>
+
+<footer>
+  <strong>Software Engineering Study Guide</strong><br>
+  BSCS-3A &nbsp;·&nbsp; Compiled by <strong>Abdul Raheem</strong> &nbsp;·&nbsp; Air University Islamabad
+</footer>
+
+<div class="watermark">Abdul Raheem · BSCS-3A</div>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<script>
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
+      const id=e.target.getAttribute('id');
+      const link=document.querySelector(`.sidebar a[href="#${id}"]`);
+      if(link)link.classList.add('active');
+    }
+  })
+},{rootMargin:'-20% 0px -70% 0px'});
+document.querySelectorAll('h2[id],h3[id]').forEach(el=>observer.observe(el));
+
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open')}
+window.addEventListener('scroll',()=>{document.getElementById('btt').classList.toggle('show',window.scrollY>300)})
+</script>
+
+</body>
+</html>
